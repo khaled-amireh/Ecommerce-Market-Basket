@@ -1,4 +1,5 @@
 # E-Commerce Market Basket Analysis using the Apriori Algorithm
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 
 ## Project Overview
 
