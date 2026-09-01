@@ -548,3 +548,9 @@ systems, inventory planning, and warehouse optimization.
 This project also demonstrates an important real-world aspect of data
 mining: algorithm performance and memory constraints must be considered
 when working with large-scale transactional datasets.
+
+---
+
+## Author
+
+**Khaled Amireh**
