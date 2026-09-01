@@ -409,9 +409,7 @@ This makes it easier to identify rules that combine:
 
 Add your generated visualization below:
 
-``` markdown
 ![Association Rules Visualization](images/association_rules_plot.png)
-```
 
 ------------------------------------------------------------------------
 
