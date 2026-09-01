@@ -1,12 +1,5 @@
 # E-Commerce Market Basket Analysis using the Apriori Algorithm
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458)
-![NumPy](https://img.shields.io/badge/NumPy-Numerical%20Computing-blue)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-Visualization-blue)
-![Seaborn](https://img.shields.io/badge/Seaborn-Visualization-3776AB)
-![Mlxtend](https://img.shields.io/badge/Mlxtend-Association%20Rules-orange)
-
 ## Project Overview
 
 Market Basket Analysis is a data mining technique used to discover
