@@ -43,7 +43,7 @@ The insights produced support real business decisions, including:
 |  Product Bundling | Combine frequently co-purchased items into promotional bundles |
 |  Cross-Selling | Power "customers also bought" recommendation engines |
 |  Personalized Marketing | Target customers based on purchase associations |
-| 📦 Inventory Planning | Anticipate correlated demand across products |
+|  Inventory Planning | Anticipate correlated demand across products |
 | 🏭 Warehouse Optimization | Store associated products closer together to reduce picking time |
 
 The project follows a complete, end-to-end data mining pipeline — from raw transactional data to business-ready recommendations.
