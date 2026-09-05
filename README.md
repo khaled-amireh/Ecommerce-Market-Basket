@@ -1,167 +1,151 @@
-# E-Commerce Market Basket Analysis using the Apriori Algorithm
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+# 🛒 E-Commerce Market Basket Analysis using the Apriori Algorithm
 
-## Project Overview
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-Data%20Processing-150458?logo=pandas&logoColor=white)
+![Mlxtend](https://img.shields.io/badge/Mlxtend-Association%20Rules-orange)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-Market Basket Analysis is a data mining technique used to discover
-relationships between products that are frequently purchased together.
+> Discovering hidden purchasing patterns in ~500,000 e-commerce transactions using frequent itemset mining and association rule generation.
 
-This project applies the **Apriori Algorithm** to a large e-commerce
-transaction dataset containing approximately **500,000 transaction
-records**. The main objective is to identify frequent product
-combinations and generate meaningful association rules that can support
-business decisions such as product bundling, cross-selling,
-recommendation systems, inventory planning, and warehouse optimization.
+---
 
-The project follows an end-to-end data mining workflow, starting with
-data cleaning and preprocessing, followed by transaction basket
-construction, frequent itemset mining, association rule generation, and
-visualization.
+## 📖 Table of Contents
 
-------------------------------------------------------------------------
+- [Project Overview](#-project-overview)
+- [Problem Statement](#-problem-statement)
+- [Dataset](#-dataset)
+- [Workflow](#-workflow)
+- [Data Preprocessing](#-data-preprocessing)
+- [Transaction Basket Construction](#-transaction-basket-construction)
+- [Frequent Itemset Mining](#-frequent-itemset-mining)
+- [Association Rule Generation](#-association-rule-generation)
+- [Evaluation Metrics](#-evaluation-metrics)
+- [Results & Visualization](#-results--visualization)
+- [Business Applications](#-business-applications)
+- [Key Challenges](#-key-challenges)
+- [Technologies Used](#-technologies-used)
+- [Project Structure](#-project-structure)
+- [How to Run](#-how-to-run)
+- [Conclusion](#-conclusion)
+- [Author](#-author)
 
-## Problem Statement
+---
 
-E-commerce transaction datasets typically store purchases as individual
-line items. Each invoice may contain multiple products, but the
-relationships between these products are not directly visible.
+## 🎯 Project Overview
 
-For example, a transaction dataset may look like this:
+**Market Basket Analysis (MBA)** is a data mining technique that uncovers relationships between products frequently purchased together. This project applies the **Apriori Algorithm** to a large-scale e-commerce transaction dataset (~**500,000 records**) to extract frequent product combinations and generate actionable association rules.
 
-  InvoiceNo   Description   Quantity
-  ----------- ------------- ----------
-  10001       Product A     2
-  10001       Product B     1
-  10002       Product A     1
-  10002       Product C     3
+The insights produced support real business decisions, including:
 
-Although the data records each purchased item separately, it does not
-directly reveal patterns such as:
+| Application | Description |
+|---|---|
+| 🎁 Product Bundling | Combine frequently co-purchased items into promotional bundles |
+| 🔁 Cross-Selling | Power "customers also bought" recommendation engines |
+| 📣 Personalized Marketing | Target customers based on purchase associations |
+| 📦 Inventory Planning | Anticipate correlated demand across products |
+| 🏭 Warehouse Optimization | Store associated products closer together to reduce picking time |
 
-> Customers who purchase Product A are also likely to purchase Product
-> B.
+The project follows a complete, end-to-end data mining pipeline — from raw transactional data to business-ready recommendations.
 
-The purpose of this project is to transform transaction-level data into
-a format suitable for association rule mining and discover hidden
-purchasing patterns between products.
+---
 
-------------------------------------------------------------------------
+## ❓ Problem Statement
 
-## Dataset
+E-commerce datasets typically store purchases as individual line items, one row per product per invoice:
 
-The dataset used in this project is the **E-Commerce Data Dataset**,
-which contains transaction records from an online retail store.
+| InvoiceNo | Description | Quantity |
+|---|---|---|
+| 10001 | Product A | 2 |
+| 10001 | Product B | 1 |
+| 10002 | Product A | 1 |
+| 10002 | Product C | 3 |
 
-**Dataset Source:**\
-[E-Commerce Data on
-Kaggle](https://www.kaggle.com/datasets/carrie1/ecommerce-data)
+While every purchase is recorded, the **relationships between products are invisible** in this raw format. This project restructures the data to answer questions such as:
 
-### Dataset Characteristics
+> *"Customers who purchase Product A are also likely to purchase Product B."*
 
-The dataset contains approximately:
+---
 
--   500,000 transaction records
--   Thousands of unique products
--   Multiple customer transactions
--   Purchases from different countries
+## 📊 Dataset
 
-### Important Features
+**Source:** [E-Commerce Data — Kaggle](https://www.kaggle.com/datasets/carrie1/ecommerce-data)
 
-  Feature         Description
-  --------------- ------------------------------------------
-  `InvoiceNo`     Unique transaction or invoice identifier
-  `StockCode`     Product identification code
-  `Description`   Product name or description
-  `Quantity`      Number of purchased units
-  `InvoiceDate`   Date and time of the transaction
-  `UnitPrice`     Price per product unit
-  `CustomerID`    Unique customer identifier
-  `Country`       Customer country
+### Characteristics
+- ~500,000 transaction records
+- Thousands of unique products
+- Multiple customers across several countries
 
-------------------------------------------------------------------------
+### Key Features
 
-## Data Preprocessing
+| Feature | Description |
+|---|---|
+| `InvoiceNo` | Unique transaction/invoice identifier |
+| `StockCode` | Product identification code |
+| `Description` | Product name |
+| `Quantity` | Units purchased |
+| `InvoiceDate` | Date and time of transaction |
+| `UnitPrice` | Price per unit |
+| `CustomerID` | Unique customer identifier |
+| `Country` | Customer's country |
 
-Raw transaction data cannot be directly used with the Apriori algorithm.
-Several preprocessing steps were required to transform the dataset into
-transaction baskets.
+---
 
-### Handling Missing Values
+## 🔄 Workflow
 
-Records containing missing values in important attributes were removed.
+```mermaid
+flowchart LR
+    A[Raw Transaction Data] --> B[Data Cleaning]
+    B --> C[Product Filtering]
+    C --> D[Basket Matrix Construction]
+    D --> E[Binary Encoding]
+    E --> F[Apriori: Frequent Itemsets]
+    F --> G[Association Rule Generation]
+    G --> H[Evaluation: Support / Confidence / Lift]
+    H --> I[Visualization & Business Insights]
+```
 
-``` python
+---
+
+## 🧹 Data Preprocessing
+
+### 1. Handling Missing Values
+Rows missing `CustomerID` or `Description` are dropped, since both are essential for identifying valid customers and products.
+
+```python
 df = df.dropna(subset=['CustomerID', 'Description'])
 ```
 
-`CustomerID` and `Description` are important for identifying valid
-customer transactions and products.
+### 2. Removing Cancelled Transactions
+Invoices prefixed with `C` represent cancellations and are excluded, as they don't reflect completed purchases.
 
-### Removing Cancelled Transactions
-
-Invoices starting with the letter `C` represent cancelled transactions.
-
-These records were removed because they do not represent completed
-purchases and could negatively affect the discovered association
-patterns.
-
-``` python
+```python
 df['InvoiceNo'] = df['InvoiceNo'].astype(str)
 df = df[~df['InvoiceNo'].str.startswith('C')]
 ```
 
-### Removing Invalid Quantities
+### 3. Removing Invalid Quantities
+Transactions with zero or negative quantities are removed to keep the analysis focused on actual purchases.
 
-Transactions with zero or negative quantities were removed.
-
-``` python
+```python
 df = df[df['Quantity'] > 0]
 ```
 
-This ensures that the analysis focuses only on products that were
-actually purchased.
+### 4. Product Filtering for Performance
+With thousands of unique products, running Apriori on the full catalog would be computationally infeasible. The analysis is scoped to the **top 100 most frequently purchased products**, preserving dominant patterns while keeping the itemset space manageable.
 
-------------------------------------------------------------------------
-
-## Product Filtering and Memory Optimization
-
-The original dataset contains thousands of unique products.
-
-Applying Apriori directly to all products would generate a very large
-number of possible product combinations. This can significantly increase
-computational complexity and memory consumption.
-
-To make the algorithm more efficient, the analysis focuses on the most
-frequently purchased products.
-
-``` python
+```python
 top_products = df['Description'].value_counts().head(100).index
 df_filtered = df[df['Description'].isin(top_products)]
 ```
 
-Reducing the number of unique products significantly decreases the
-number of candidate itemsets generated by Apriori while preserving the
-most common purchasing patterns.
+---
 
-This step is particularly important when working with large
-transactional datasets.
+## 🧺 Transaction Basket Construction
 
-------------------------------------------------------------------------
+Transactions are grouped by `InvoiceNo` and `Description`, then pivoted into a basket matrix — one row per invoice, one column per product.
 
-## Transaction Basket Matrix Construction
-
-The Apriori algorithm requires transactions to be represented in a
-basket format.
-
-The data was grouped by:
-
--   `InvoiceNo`
--   `Description`
-
-The purchased quantities were aggregated to create a transaction-product
-matrix.
-
-``` python
+```python
 basket = (
     df_filtered[df_filtered['Country'] == 'United Kingdom']
     .groupby(['InvoiceNo', 'Description'])['Quantity']
@@ -171,69 +155,33 @@ basket = (
 )
 ```
 
-Each row represents a transaction, while each column represents a
-product.
+| InvoiceNo | Product A | Product B | Product C |
+|---|---|---|---|
+| 10001 | 2 | 1 | 0 |
+| 10002 | 1 | 0 | 3 |
 
-Example:
+**Binary encoding** converts purchase quantities into presence/absence flags, and the matrix is cast to boolean values as required by `mlxtend`:
 
-  InvoiceNo   Product A   Product B   Product C
-  ----------- ----------- ----------- -----------
-  10001       2           1           0
-  10002       1           0           3
-
-------------------------------------------------------------------------
-
-## Binary Encoding
-
-The quantity values were converted into binary values.
-
-If a product was purchased, it receives a value of `1`. Otherwise, it
-receives a value of `0`.
-
-``` python
+```python
 basket_sets = basket.map(lambda x: 1 if x > 0 else 0)
-```
-
-For Apriori processing, the transaction matrix was converted to Boolean
-values.
-
-``` python
 basket_sets = basket_sets.astype(bool)
 ```
 
-------------------------------------------------------------------------
+**Transaction filtering** removes single-item baskets, since they carry no co-purchase information:
 
-## Transaction Filtering
-
-Transactions containing fewer than two distinct products were removed.
-
-A transaction containing only one product cannot provide meaningful
-information about relationships between products.
-
-``` python
-basket_sets = basket_sets[
-    basket_sets.sum(axis=1) >= 2
-]
+```python
+basket_sets = basket_sets[basket_sets.sum(axis=1) >= 2]
 ```
 
-This ensures that the analysis focuses on valid co-purchase behavior.
+---
 
-------------------------------------------------------------------------
+## ⛏️ Frequent Itemset Mining
 
-## Frequent Itemset Mining using Apriori
+Frequent itemsets are mined with the `mlxtend` implementation of Apriori:
 
-The Apriori algorithm was used to identify combinations of products that
-frequently appear together in transactions.
-
-The implementation uses the `mlxtend` library.
-
-``` python
+```python
 from mlxtend.frequent_patterns import apriori, association_rules
-```
 
-Frequent itemsets were generated using the following configuration:
-
-``` python
 frequent_itemsets = apriori(
     basket_sets,
     min_support=0.02,
@@ -241,60 +189,28 @@ frequent_itemsets = apriori(
     low_memory=True,
     max_len=3
 )
+
+frequent_itemsets = frequent_itemsets.sort_values(by='support', ascending=False)
 ```
 
-The itemsets were then sorted according to their support values.
+### Configuration Rationale
 
-``` python
-frequent_itemsets = frequent_itemsets.sort_values(
-    by='support',
-    ascending=False
-)
+| Parameter | Value | Purpose |
+|---|---|---|
+| `min_support` | `0.02` | Filters out rare, statistically insignificant combinations |
+| `use_colnames` | `True` | Returns readable product names instead of column indices |
+| `low_memory` | `True` | Reduces memory footprint during candidate generation |
+| `max_len` | `3` | Caps itemset size to control combinatorial growth |
 
-frequent_itemsets.head(10)
-```
+These settings balance **pattern discovery** against the **computational cost** of mining a 500K-row dataset.
 
-------------------------------------------------------------------------
+---
 
-## Apriori Configuration
+## 🔗 Association Rule Generation
 
-The following configuration was selected to balance pattern discovery
-with computational efficiency.
+Rules are derived from the frequent itemsets, filtered by a minimum lift threshold:
 
-  -----------------------------------------------------------------------
-  Parameter                    Value              Purpose
-  ---------------------------- ------------------ -----------------------
-  `min_support`                `0.02`             Removes infrequent
-                                                  product combinations
-
-  `use_colnames`               `True`             Displays product names
-                                                  instead of column
-                                                  indices
-
-  `low_memory`                 `True`             Reduces memory
-                                                  consumption
-
-  `max_len`                    `3`                Limits itemset
-                                                  combinations to a
-                                                  maximum of three
-                                                  products
-  -----------------------------------------------------------------------
-
-The dataset size and the number of unique products can make Apriori
-computationally expensive.
-
-Limiting the number of products, increasing the minimum support
-threshold, enabling memory-efficient processing, and restricting itemset
-length help reduce computational complexity and memory usage.
-
-------------------------------------------------------------------------
-
-## Association Rule Generation
-
-After identifying frequent itemsets, association rules were generated
-using the `association_rules` function.
-
-``` python
+```python
 rules = association_rules(
     frequent_itemsets,
     metric='lift',
@@ -302,256 +218,150 @@ rules = association_rules(
 )
 ```
 
-The rules describe relationships in the following format:
+Each rule follows the form:
 
-``` text
-Product A -> Product B
+```
+Product A → Product B
 ```
 
-This can be interpreted as:
-
-> Customers who purchase Product A are also likely to purchase Product
-> B.
-
-------------------------------------------------------------------------
-
-## Evaluation Metrics
-
-The strength of the generated association rules was evaluated using
-three main metrics:
-
--   Support
--   Confidence
--   Lift
-
-### Support
-
-Support measures how frequently an item or itemset appears across all
-transactions.
-
-**Support(A) = Transactions containing A / Total transactions**
-
-A higher support value indicates that the product or product combination
-appears frequently in the dataset.
-
-### Confidence
-
-Confidence measures the probability that a customer purchases Product B
-when Product A has already been purchased.
-
-**Confidence(A -\> B) = Support(A and B) / Support(A)**
-
-For example, a confidence value of `0.70` means that approximately 70%
-of transactions containing Product A also contain Product B.
-
-### Lift
-
-Lift measures the strength of the relationship between two products
-compared with what would be expected if they were statistically
-independent.
-
-**Lift(A -\> B) = Confidence(A -\> B) / Support(B)**
-
-Lift values can be interpreted as follows:
-
--   `Lift > 1` indicates a positive association between products.
--   `Lift = 1` indicates no meaningful association.
--   `Lift < 1` indicates a negative association.
-
-Rules with higher lift values indicate stronger relationships between
-products.
-
-------------------------------------------------------------------------
-
-## Rule Analysis
-
-The generated association rules can be ranked and filtered based on
-different evaluation metrics.
-
-For example, rules can be sorted according to Lift:
-
-``` python
-rules = rules.sort_values(
-    by='lift',
-    ascending=False
-)
-
-rules.head(10)
-```
-
-High-lift rules with reasonable support and confidence are generally
-more useful for business applications than rules that rely on only one
-metric.
-
-A rule with extremely high confidence but very low support may represent
-a rare pattern and may not be useful for large-scale business decisions.
-
-For this reason, association rules should be evaluated using multiple
-metrics rather than relying on a single value.
-
-------------------------------------------------------------------------
-
-## Association Rules Visualization
-
-The relationship between Support, Confidence, and Lift can be visualized
-using a scatter plot.
-
-The visualization represents:
-
--   The x-axis as Support.
--   The y-axis as Confidence.
--   Point size and color intensity as Lift.
-
-This makes it easier to identify rules that combine:
-
--   Strong product association
--   High confidence
--   Meaningful transaction frequency
-
-Add your generated visualization below:
-
-![Association Rules Visualization](images/association_rules_plot.png)
-
-------------------------------------------------------------------------
-
-## Business Insights and Applications
-
-The association rules discovered in this project can support several
-e-commerce strategies.
-
-### Product Bundling
-
-Products with strong association rules can be grouped into promotional
-bundles.
-
-For example:
-
-> Buy Product A and Product B together at a discounted price.
-
-This can increase the Average Order Value and encourage customers to
-purchase related products.
-
-### Cross-Selling Recommendations
-
-Association rules can be used to create product recommendation systems.
-
-For example:
-
-> Customers who bought this product also purchased...
-
-These recommendations can be displayed on:
-
--   Product pages
--   Shopping carts
--   Checkout pages
-
-### Personalized Marketing
-
-Association patterns can support targeted marketing campaigns.
-
-Customers who previously purchased a particular product may receive
-recommendations for strongly associated products.
-
-This can improve the relevance of marketing campaigns and product
-recommendations.
-
-### Inventory Planning
-
-Frequently associated products can provide useful information for
-inventory planning.
-
-Products that are often purchased together may experience related demand
-patterns.
-
-Understanding these relationships can help businesses improve:
-
--   Stock planning
--   Product availability
--   Demand forecasting
-
-### Warehouse Optimization
-
-Products that are frequently purchased together can potentially be
-stored closer to each other in fulfillment centers.
-
-This may help reduce picking time and improve order processing
-efficiency.
-
-------------------------------------------------------------------------
-
-## Key Challenges
-
-One of the main challenges in this project was applying the Apriori
-algorithm to a large transaction dataset.
-
-Apriori can become computationally expensive because the number of
-possible product combinations increases rapidly as the number of unique
-products grows.
-
-Memory consumption therefore becomes an important consideration when
-working with large-scale transaction data.
-
-Several strategies were used to reduce computational complexity:
-
--   Filtering the dataset to the most frequently purchased products
--   Removing invalid and cancelled transactions
--   Removing transactions with fewer than two products
--   Using a higher minimum support threshold
--   Enabling `low_memory=True`
--   Limiting itemset size using `max_len`
-
-These steps allow the analysis to focus on meaningful purchasing
-patterns while keeping memory usage and computational requirements
-manageable.
-
-------------------------------------------------------------------------
-
-## Technologies Used
-
-This project was developed using the following technologies and
-libraries:
-
--   Python
--   Pandas
--   NumPy
--   Matplotlib
--   Seaborn
--   Mlxtend
--   Jupyter Notebook
-
-------------------------------------------------------------------------
-
-## Conclusion
-
-This project demonstrates how raw e-commerce transaction data can be
-transformed into meaningful business insights using Association Rule
-Mining.
-
-The complete workflow includes:
-
-1.  Cleaning transaction records.
-2.  Removing cancelled and invalid purchases.
-3.  Reducing the product search space.
-4.  Constructing a transaction basket matrix.
-5.  Applying binary encoding.
-6.  Filtering transactions for meaningful co-purchase analysis.
-7.  Mining frequent itemsets using the Apriori algorithm.
-8.  Generating association rules.
-9.  Evaluating rules using Support, Confidence, and Lift.
-10. Visualizing product relationships.
-11. Translating discovered patterns into practical business
-    recommendations.
-
-The discovered association patterns can support practical e-commerce
-applications such as product bundling, cross-selling, recommendation
-systems, inventory planning, and warehouse optimization.
-
-This project also demonstrates an important real-world aspect of data
-mining: algorithm performance and memory constraints must be considered
-when working with large-scale transactional datasets.
+interpreted as: *customers who buy Product A are also likely to buy Product B.*
 
 ---
 
-## Author
+## 📐 Evaluation Metrics
+
+| Metric | Formula | Interpretation |
+|---|---|---|
+| **Support** | `Support(A) = Transactions containing A / Total transactions` | How frequently an itemset appears overall |
+| **Confidence** | `Confidence(A→B) = Support(A ∩ B) / Support(A)` | Probability of buying B given A was bought |
+| **Lift** | `Lift(A→B) = Confidence(A→B) / Support(B)` | Strength of association relative to chance |
+
+**Lift interpretation:**
+- `Lift > 1` → positive association
+- `Lift = 1` → no meaningful association
+- `Lift < 1` → negative association
+
+Rules are ranked using a combination of these three metrics, since high confidence alone can be misleading for low-support (rare) itemsets.
+
+```python
+rules = rules.sort_values(by='lift', ascending=False)
+rules.head(10)
+```
+
+---
+
+## 📈 Results & Visualization
+
+The relationship between Support, Confidence, and Lift is visualized as a scatter plot, where:
+
+- **X-axis** → Support
+- **Y-axis** → Confidence
+- **Point size / color intensity** → Lift
+
+This highlights rules that combine strong association, high confidence, and meaningful frequency.
+
+<p align="center">
+  <img src="images/association_rules_plot.png" alt="Association Rules Visualization" width="700"/>
+</p>
+
+---
+
+## 💼 Business Applications
+
+<table>
+<tr><td width="20%"><b>🎁 Product Bundling</b></td><td>Bundle high-lift product pairs at a discount to increase Average Order Value.</td></tr>
+<tr><td><b>🔁 Cross-Selling</b></td><td>Power "customers who bought this also bought…" widgets on product, cart, and checkout pages.</td></tr>
+<tr><td><b>📣 Personalized Marketing</b></td><td>Target customers with recommendations based on prior purchases and strong associations.</td></tr>
+<tr><td><b>📦 Inventory Planning</b></td><td>Anticipate correlated demand between associated products for smarter stock planning.</td></tr>
+<tr><td><b>🏭 Warehouse Optimization</b></td><td>Position frequently co-purchased items closer together to reduce picking time.</td></tr>
+</table>
+
+---
+
+## ⚠️ Key Challenges
+
+Applying Apriori at this scale surfaced several performance considerations:
+
+- Combinatorial explosion of candidate itemsets as product count grows
+- Memory overhead when generating and storing frequent itemsets
+- Balancing minimum support thresholds against pattern richness
+
+**Mitigations applied:**
+- ✅ Restricted analysis to the top 100 most frequent products
+- ✅ Removed cancelled and invalid transactions upfront
+- ✅ Filtered out single-item baskets
+- ✅ Used a higher `min_support` threshold
+- ✅ Enabled `low_memory=True`
+- ✅ Capped itemset length with `max_len=3`
+
+---
+
+## 🛠️ Technologies Used
+
+| Category | Tools |
+|---|---|
+| Language | Python |
+| Data Handling | Pandas, NumPy |
+| Visualization | Matplotlib, Seaborn |
+| Association Rule Mining | Mlxtend |
+| Environment | Jupyter Notebook |
+
+---
+
+## 📁 Project Structure
+
+```
+ecommerce-market-basket-analysis/
+│
+├── data/
+│   └── ecommerce_data.csv
+├── images/
+│   └── association_rules_plot.png
+├── notebooks/
+│   └── market_basket_analysis.ipynb
+├── README.md
+└── requirements.txt
+```
+
+---
+
+## ▶️ How to Run
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/khaled-amireh/ecommerce-market-basket-analysis.git
+cd ecommerce-market-basket-analysis
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Launch the notebook
+jupyter notebook notebooks/market_basket_analysis.ipynb
+```
+
+---
+
+## ✅ Conclusion
+
+This project demonstrates a complete data mining pipeline that transforms raw e-commerce transactions into actionable business insight:
+
+1. Clean and validate transaction records
+2. Remove cancelled and invalid purchases
+3. Reduce the product search space
+4. Construct a transaction basket matrix
+5. Apply binary encoding
+6. Filter for meaningful co-purchase behavior
+7. Mine frequent itemsets with Apriori
+8. Generate association rules
+9. Evaluate rules using Support, Confidence, and Lift
+10. Visualize product relationships
+11. Translate patterns into business recommendations
+
+Beyond the algorithm itself, the project highlights a critical real-world lesson in data mining: **performance and memory constraints must be actively managed** when working with large-scale transactional data.
+
+---
+
+## 👤 Author
 
 **Khaled Amireh**
+[GitHub](https://github.com/khaled-amireh)
