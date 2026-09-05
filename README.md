@@ -1,4 +1,4 @@
-# 🛒 E-Commerce Market Basket Analysis using the Apriori Algorithm
+#  E-Commerce Market Basket Analysis using the Apriori Algorithm
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
 ![Pandas](https://img.shields.io/badge/Pandas-Data%20Processing-150458?logo=pandas&logoColor=white)
