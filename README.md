@@ -50,7 +50,7 @@ The project follows a complete, end-to-end data mining pipeline — from raw tra
 
 ---
 
-## ❓ Problem Statement
+##  Problem Statement
 
 E-commerce datasets typically store purchases as individual line items, one row per product per invoice:
 
