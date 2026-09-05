@@ -67,7 +67,7 @@ While every purchase is recorded, the **relationships between products are invis
 
 ---
 
-## 📊 Dataset
+##  Dataset
 
 **Source:** [E-Commerce Data — Kaggle](https://www.kaggle.com/datasets/carrie1/ecommerce-data)
 
