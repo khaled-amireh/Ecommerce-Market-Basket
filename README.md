@@ -269,7 +269,7 @@ This highlights rules that combine strong association, high confidence, and mean
 ##  Business Applications
 
 <table>
-<tr><td width="20%"><b>🎁 Product Bundling</b></td><td>Bundle high-lift product pairs at a discount to increase Average Order Value.</td></tr>
+<tr><td width="20%"><b> Product Bundling</b></td><td>Bundle high-lift product pairs at a discount to increase Average Order Value.</td></tr>
 <tr><td><b>🔁 Cross-Selling</b></td><td>Power "customers who bought this also bought…" widgets on product, cart, and checkout pages.</td></tr>
 <tr><td><b>📣 Personalized Marketing</b></td><td>Target customers with recommendations based on prior purchases and strong associations.</td></tr>
 <tr><td><b>📦 Inventory Planning</b></td><td>Anticipate correlated demand between associated products for smarter stock planning.</td></tr>
