@@ -44,7 +44,7 @@ The insights produced support real business decisions, including:
 |  Cross-Selling | Power "customers also bought" recommendation engines |
 |  Personalized Marketing | Target customers based on purchase associations |
 |  Inventory Planning | Anticipate correlated demand across products |
-| 🏭 Warehouse Optimization | Store associated products closer together to reduce picking time |
+|  Warehouse Optimization | Store associated products closer together to reduce picking time |
 
 The project follows a complete, end-to-end data mining pipeline — from raw transactional data to business-ready recommendations.
 
@@ -107,7 +107,7 @@ flowchart LR
 
 ---
 
-## 🧹 Data Preprocessing
+##  Data Preprocessing
 
 ### 1. Handling Missing Values
 Rows missing `CustomerID` or `Description` are dropped, since both are essential for identifying valid customers and products.
@@ -141,7 +141,7 @@ df_filtered = df[df['Description'].isin(top_products)]
 
 ---
 
-## 🧺 Transaction Basket Construction
+##  Transaction Basket Construction
 
 Transactions are grouped by `InvoiceNo` and `Description`, then pivoted into a basket matrix — one row per invoice, one column per product.
 
@@ -175,7 +175,7 @@ basket_sets = basket_sets[basket_sets.sum(axis=1) >= 2]
 
 ---
 
-## ⛏️ Frequent Itemset Mining
+##  Frequent Itemset Mining
 
 Frequent itemsets are mined with the `mlxtend` implementation of Apriori:
 
@@ -206,7 +206,7 @@ These settings balance **pattern discovery** against the **computational cost** 
 
 ---
 
-## 🔗 Association Rule Generation
+##  Association Rule Generation
 
 Rules are derived from the frequent itemsets, filtered by a minimum lift threshold:
 
@@ -228,7 +228,7 @@ interpreted as: *customers who buy Product A are also likely to buy Product B.*
 
 ---
 
-## 📐 Evaluation Metrics
+##  Evaluation Metrics
 
 | Metric | Formula | Interpretation |
 |---|---|---|
@@ -250,7 +250,7 @@ rules.head(10)
 
 ---
 
-## 📈 Results & Visualization
+##  Results & Visualization
 
 The relationship between Support, Confidence, and Lift is visualized as a scatter plot, where:
 
@@ -266,7 +266,7 @@ This highlights rules that combine strong association, high confidence, and mean
 
 ---
 
-## 💼 Business Applications
+##  Business Applications
 
 <table>
 <tr><td width="20%"><b>🎁 Product Bundling</b></td><td>Bundle high-lift product pairs at a discount to increase Average Order Value.</td></tr>
@@ -278,7 +278,7 @@ This highlights rules that combine strong association, high confidence, and mean
 
 ---
 
-## ⚠️ Key Challenges
+##  Key Challenges
 
 Applying Apriori at this scale surfaced several performance considerations:
 
@@ -287,16 +287,16 @@ Applying Apriori at this scale surfaced several performance considerations:
 - Balancing minimum support thresholds against pattern richness
 
 **Mitigations applied:**
-- ✅ Restricted analysis to the top 100 most frequent products
-- ✅ Removed cancelled and invalid transactions upfront
-- ✅ Filtered out single-item baskets
-- ✅ Used a higher `min_support` threshold
-- ✅ Enabled `low_memory=True`
-- ✅ Capped itemset length with `max_len=3`
+-  Restricted analysis to the top 100 most frequent products
+-  Removed cancelled and invalid transactions upfront
+-  Filtered out single-item baskets
+-  Used a higher `min_support` threshold
+-  Enabled `low_memory=True`
+-  Capped itemset length with `max_len=3`
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 | Category | Tools |
 |---|---|
@@ -308,7 +308,7 @@ Applying Apriori at this scale surfaced several performance considerations:
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 ecommerce-market-basket-analysis/
@@ -325,7 +325,7 @@ ecommerce-market-basket-analysis/
 
 ---
 
-## ▶️ How to Run
+##  How to Run
 
 ```bash
 # 1. Clone the repository
@@ -341,7 +341,7 @@ jupyter notebook notebooks/market_basket_analysis.ipynb
 
 ---
 
-## ✅ Conclusion
+##  Conclusion
 
 This project demonstrates a complete data mining pipeline that transforms raw e-commerce transactions into actionable business insight:
 
