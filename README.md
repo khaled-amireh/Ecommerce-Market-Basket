@@ -40,7 +40,7 @@ The insights produced support real business decisions, including:
 
 | Application | Description |
 |---|---|
-| 🎁 Product Bundling | Combine frequently co-purchased items into promotional bundles |
+|  Product Bundling | Combine frequently co-purchased items into promotional bundles |
 | 🔁 Cross-Selling | Power "customers also bought" recommendation engines |
 | 📣 Personalized Marketing | Target customers based on purchase associations |
 | 📦 Inventory Planning | Anticipate correlated demand across products |
