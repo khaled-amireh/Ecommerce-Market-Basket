@@ -91,7 +91,7 @@ While every purchase is recorded, the **relationships between products are invis
 
 ---
 
-## 🔄 Workflow
+## Workflow
 
 ```mermaid
 flowchart LR
