@@ -361,7 +361,6 @@ Beyond the algorithm itself, the project highlights a critical real-world lesson
 
 ---
 
-## 👤 Author
+##  Author
 
 **Khaled Amireh**
-[GitHub](https://github.com/khaled-amireh)
