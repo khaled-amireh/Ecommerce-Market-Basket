@@ -69,6 +69,9 @@ consistent with the notebook preview, which alone cannot establish file identity
 No claim of locally verified production provenance is made. The source's missing
 value metadata cannot replace inspection of the actual CSV.
 
+See the [provenance and acquisition record](docs/DATA_PROVENANCE.md) for the
+evidence chain and the checks needed to identify a future input snapshot.
+
 ## 04 Understanding market basket analysis
 
 An **itemset** is an unordered set of descriptions. A frequent itemset meets a
