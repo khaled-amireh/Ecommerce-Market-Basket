@@ -335,6 +335,9 @@ Ecommerce-Market-Basket/
 
 ## 17 Installation and reproduction
 
+The [reproduction and troubleshooting guide](docs/REPRODUCTION.md) covers
+kernel selection, input checks, version caveats, and common failure modes.
+
 Review existing outputs by opening the notebook without executing it. For an
 independent future run, create a disposable clone:
 
