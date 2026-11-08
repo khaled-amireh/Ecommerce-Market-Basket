@@ -175,6 +175,9 @@ to prune candidates. The threshold is a frequency cutoff, with **no statistical
 significance guarantee**. Four-item combinations are outside the search.
 See the [mlxtend Apriori documentation](https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/).
 
+The [configuration reference](docs/APRIORI_CONFIGURATION.md) records search
+boundaries, minimum-count interpretation, and unchecked empty-input cases.
+
 ## 09 Association rule generation
 
 ```python
