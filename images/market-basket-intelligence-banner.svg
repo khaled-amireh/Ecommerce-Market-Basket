@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title description">
+  <title id="title">Market Basket Intelligence</title>
+  <desc id="description">Discovering Product Relationships Through Association Rule Mining. Abstract product nodes connected above a geometric shopping basket; decorative connections represent no measured results.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#081321"/>
+      <stop offset="1" stop-color="#151B3D"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#F8FAFC" stroke-opacity=".035"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="400" rx="18" fill="url(#background)"/>
+  <rect width="1200" height="400" rx="18" fill="url(#grid)"/>
+  <path d="M48 62H118" stroke="#22D3EE" stroke-width="3"/>
+  <text x="134" y="67" fill="#B9C7DC" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="3">RETAIL ANALYTICS / APRIORI</text>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#F8FAFC" font-size="53" font-weight="700" letter-spacing="1">
+    <text x="48" y="153">MARKET BASKET</text>
+    <text x="48" y="216">INTELLIGENCE</text>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#D3DCEC">
+    <text x="50" y="263">Discovering Product Relationships</text>
+    <text x="50" y="290">Through Association Rule Mining</text>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="12" letter-spacing="2" fill="#A9B9CE">
+    <text x="50" y="355">FREQUENT ITEMSETS</text>
+    <text x="247" y="355" fill="#22D3EE">/</text>
+    <text x="270" y="355">ASSOCIATION RULES</text>
+    <text x="475" y="355" fill="#8B5CF6">/</text>
+    <text x="499" y="355">RETAIL INSIGHT</text>
+  </g>
+  <path d="M729 48V352" stroke="#8B5CF6" stroke-opacity=".25"/>
+  <g fill="none" stroke-width="1.5">
+    <path d="M822 115L945 77L1084 135L1039 234L891 220Z" stroke="#8B5CF6" stroke-opacity=".7"/>
+    <path d="M822 115L1039 234M945 77L891 220M945 77L1039 234M1084 135L891 220" stroke="#22D3EE" stroke-opacity=".35"/>
+    <path d="M795 260H1102L1077 336H822ZM862 260L908 215M1033 260L988 215" stroke="#8B5CF6" stroke-opacity=".8"/>
+    <path d="M816 285H1094M824 310H1086M864 262L875 336M918 262L922 336M972 262L968 336M1026 262L1015 336" stroke="#8B5CF6" stroke-opacity=".25"/>
+  </g>
+  <g fill="#081321" stroke-width="2">
+    <circle cx="822" cy="115" r="24" stroke="#22D3EE"/>
+    <circle cx="945" cy="77" r="18" stroke="#8B5CF6"/>
+    <circle cx="1084" cy="135" r="27" stroke="#22D3EE"/>
+    <circle cx="891" cy="220" r="21" stroke="#8B5CF6"/>
+    <circle cx="1039" cy="234" r="18" stroke="#22D3EE"/>
+  </g>
+  <g fill="none" stroke="#F8FAFC" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M813 110L822 105L831 110V121L822 126L813 121ZM813 110L822 115L831 110M822 115V126"/>
+    <path d="M1073 128H1095V145H1073ZM1079 128V123H1089V128"/>
+    <path d="M883 215H899V227H883ZM887 215V210H895V215"/>
+  </g>
+  <g fill="#22D3EE">
+    <circle cx="945" cy="77" r="4"/>
+    <circle cx="1039" cy="234" r="4"/>
+    <circle cx="997" cy="99" r="3"/>
+    <circle cx="850" cy="166" r="3"/>
+  </g>
+  <text x="945" y="371" text-anchor="middle" fill="#9CAFC9" font-family="Arial, Helvetica, sans-serif" font-size="10" letter-spacing="3">PATTERNS INTO POSSIBILITIES</text>
+</svg>
