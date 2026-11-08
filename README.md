@@ -194,6 +194,9 @@ recorded. See the [official rule guide](https://rasbt.github.io/mlxtend/user_gui
 A rule is an observed relationship in selected invoices, not evidence that
 recommending B to purchasers of A will cause an additional sale.
 
+See the [rule-generation reference](docs/ASSOCIATION_RULES.md) for ranking,
+multi-item semantics, and the limits of the truncated output.
+
 ## 10 Understanding the metrics
 
 Let N be retained baskets and n(X) count baskets containing every item in X.
