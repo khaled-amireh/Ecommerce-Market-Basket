@@ -102,6 +102,9 @@ returns against original purchases. **No UnitPrice validation, duplicate removal
 description normalization, or StockCode consistency check is implemented.**
 Removal counts and the effect of excluded anonymous purchases are unknown.
 
+The [cleaning methodology](docs/CLEANING_METHODOLOGY.md) distinguishes filter
+guarantees, partial-invoice effects, and checks that are still unimplemented.
+
 ## 06 Transaction basket engineering
 
 After top-description selection, the implementation aggregates quantities by
