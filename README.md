@@ -296,6 +296,9 @@ All are unimplemented proposals. High lift alone cannot establish business value
 
 ## 15 Reliability and limitations
 
+The [read-only technical audit](docs/CODE_AUDIT.md) records 14 findings with
+source locations, evidence, severity, status, impact, and proposed corrections.
+
 - **Population selection:** known-customer filtering, global top descriptions,
   UK selection, and singleton exclusion restrict generalization.
 - **Data quality:** duplicate lines, price validity, description aliases, missing
