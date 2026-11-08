@@ -216,6 +216,9 @@ symmetric under reversal; confidence is directional. None measures profit.
 20, B in 10, and both in 5. Support is 5%, confidence A -> B is 25%, and lift is
 2.5. Reverse confidence is 50%. These calculations use a fixed population.
 
+The [metrics guide](docs/METRICS_GUIDE.md) adds interpretation pitfalls and an
+arithmetic consistency check using the rounded saved teacup-rule metrics.
+
 ## 11 Mining architecture
 
 ```mermaid
