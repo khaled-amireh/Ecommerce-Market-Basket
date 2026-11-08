@@ -29,7 +29,7 @@
     <text x="475" y="355" fill="#8B5CF6">/</text>
     <text x="499" y="355">RETAIL INSIGHT</text>
   </g>
-  <path d="M729 48V352" stroke="#8B5CF6" stroke-opacity=".25"/>
+  <path d="M729 48V352" stroke="#312E81" stroke-opacity=".8"/>
   <g fill="none" stroke-width="1.5">
     <path d="M822 115L945 77L1084 135L1039 234L891 220Z" stroke="#8B5CF6" stroke-opacity=".7"/>
     <path d="M822 115L1039 234M945 77L891 220M945 77L1039 234M1084 135L891 220" stroke="#22D3EE" stroke-opacity=".35"/>

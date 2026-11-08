@@ -16,9 +16,9 @@ Explore the [original notebook](ecommerce_market_basket.ipynb), the
 > The standalone script has a syntax error; see reproduction caveats below.
 > No mining was rerun for this documentation review.
 
-[Problem](#02-business-problem) | [Dataset](#03-dataset-intelligence) |
-[Engineering](#06-transaction-basket-engineering) | [Metrics](#10-understanding-the-metrics) |
-[Results](#12-verified-results) | [Reliability](#15-reliability-and-limitations) |
+[Problem](#02-business-problem) · [Dataset](#03-dataset-intelligence) ·
+[Engineering](#06-transaction-basket-engineering) · [Metrics](#10-understanding-the-metrics) ·
+[Results](#12-verified-results) · [Reliability](#15-reliability-and-limitations) ·
 [Reproduce](#17-installation-and-reproduction)
 
 ## 01 Executive overview
@@ -55,8 +55,8 @@ acquisition code, file checksum, or dataset version is recorded.
 The related [UCI Online Retail source](https://archive.ics.uci.edu/dataset/352/online+retail)
 reports 541,909 line-item records spanning 1 December 2010 to 9 December 2011.
 Its schema lists eight variables. These are **source-level facts**, not a
-verified shape or date range for the missing local CSV. Its first records are
-consistent with the notebook preview, which alone cannot establish file identity.
+verified shape or date range for the missing local CSV. The preview's column
+names match that source's schema; this alone cannot establish file identity.
 
 | Evidence | What can be established |
 | --- | --- |
@@ -315,15 +315,28 @@ source locations, evidence, severity, status, impact, and proposed corrections.
 
 ## 16 Repository structure
 
-Tracked files at this documentation stage:
+Exact tracked project tree after the documentation update:
 
 ```text
 Ecommerce-Market-Basket/
 |-- docs/
-|   `-- EVIDENCE_BASELINE.md
+|   |-- APRIORI_CONFIGURATION.md
+|   |-- ASSOCIATION_RULES.md
+|   |-- BASKET_ENGINEERING.md
+|   |-- CLEANING_METHODOLOGY.md
+|   |-- CODE_AUDIT.md
+|   |-- DATA_DICTIONARY.md
+|   |-- DATA_PROVENANCE.md
+|   |-- EVIDENCE_BASELINE.md
+|   |-- METRICS_GUIDE.md
+|   |-- PRODUCT_SCOPE.md
+|   |-- REPRODUCTION.md
+|   |-- VALIDATION.md
+|   `-- VERIFIED_RESULTS.md
 |-- images/
 |   |-- association_rules_plot.png
 |   `-- market-basket-intelligence-banner.svg
+|-- CONTRIBUTING.md
 |-- LICENSE
 |-- README.md
 |-- ecommerce_market_basket.ipynb
@@ -332,6 +345,9 @@ Ecommerce-Market-Basket/
 ```
 
 `data.csv` is expected at runtime but is absent from the tracked repository.
+
+See [contribution guidance](CONTRIBUTING.md) for evidence standards and
+[validation evidence](docs/VALIDATION.md) for preservation and documentation checks.
 
 ## 17 Installation and reproduction
 

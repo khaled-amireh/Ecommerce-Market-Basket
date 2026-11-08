@@ -2,7 +2,7 @@
 
 Review date: 2026-11-08. Baseline:
 `ad13f98afac5c646bb38cd3521d69352c2d86e0c` on `main`.
-All original files remain unchanged. No mining or dataset reconstruction was run.
+All protected original files remain unchanged. No mining or dataset reconstruction was run.
 See the [hash baseline](EVIDENCE_BASELINE.md) and [saved-result ledger](VERIFIED_RESULTS.md).
 
 ## Method and severity

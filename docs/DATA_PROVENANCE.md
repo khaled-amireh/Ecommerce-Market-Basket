@@ -21,7 +21,7 @@ The repository's MIT license does not relicense third-party data.
 | Question | Evidence | Confidence boundary |
 | --- | --- | --- |
 | Which input was opened historically? | Saved cell 4 shows the first five rows | Filename is recorded; file identity is not |
-| Is it compatible with Online Retail? | Eight column names and preview records are consistent | Similarity does not establish byte equivalence |
+| Is its schema compatible with Online Retail? | Eight preview column names match the source schema | Schema agreement does not establish file identity |
 | How many local records? | No `shape` or full dataset | Unknown |
 | What dates were actually loaded? | Preview shows `12/1/2010 8:26` | No parsed date extrema or range validation |
 | How much missing data? | Cleaning calls `dropna` on two fields | No saved null counts |
