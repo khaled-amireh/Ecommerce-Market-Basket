@@ -262,6 +262,9 @@ The first displayed rule has support 0.021304, confidence 0.716511, and lift
 membership cannot be reported. Total frequent itemsets, total rules, and retained
 basket count are unavailable; DataFrame index labels are not counts.
 
+The [saved-result ledger](docs/VERIFIED_RESULTS.md) transcribes all ten visible
+itemsets and all ten rule metric rows, and records the two original plot artifacts.
+
 ## 13 Visual analysis
 
 ![Original association-rule scatter: support on x, confidence on y, with lift encoded in point size and color](images/association_rules_plot.png)
