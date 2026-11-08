@@ -147,6 +147,9 @@ selected description are subsequently excluded. Patterns involving descriptions
 outside this universe cannot be discovered. Actual UK matrix width is not saved
 and must not be assumed to equal 100.
 
+The [product and country scope analysis](docs/PRODUCT_SCOPE.md) separates
+catalog restriction from the resulting changes to invoice eligibility.
+
 ## 08 Apriori algorithm
 
 The exact notebook call (cell 10) is:
