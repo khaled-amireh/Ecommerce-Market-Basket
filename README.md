@@ -128,6 +128,9 @@ The >= 2 test counts **selected descriptions**, not units or all items on the
 original invoice. Removing singleton baskets changes the support denominator
 and can also change confidence and lift.
 
+See [basket engineering](docs/BASKET_ENGINEERING.md) for a formal population
+definition and a worked example of the denominator change.
+
 ## 07 Product filtering strategy
 
 ```python
