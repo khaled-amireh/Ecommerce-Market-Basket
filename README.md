@@ -72,6 +72,9 @@ value metadata cannot replace inspection of the actual CSV.
 See the [provenance and acquisition record](docs/DATA_PROVENANCE.md) for the
 evidence chain and the checks needed to identify a future input snapshot.
 
+The [feature dictionary](docs/DATA_DICTIONARY.md) explains every input column,
+its actual role, and the grain of the derived analytical objects.
+
 ## 04 Understanding market basket analysis
 
 An **itemset** is an unordered set of descriptions. A frequent itemset meets a
