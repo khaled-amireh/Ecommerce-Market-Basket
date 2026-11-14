@@ -31,15 +31,13 @@ basket_sets = basket_sets[(basket_sets.sum(axis=1) >= 2)]
 # Apriori Algorithm & Frequent Itemsets Mining
 frequent_itemsets = apriori(basket_sets.astype(bool), min_support=0.02, use_colnames=True, low_memory=True, max_len=3)
 frequent_itemsets = frequent_itemsets.sort_values(by='support', ascending=False)
-print("
-Top Frequent Itemsets:")
+print("\nTop Frequent Itemsets:")
 print(frequent_itemsets.head(10))
 
 # Extracting Association Rules
 rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1.0)
 rules = rules.sort_values(by=['lift', 'confidence'], ascending=[False, False])
-print("
-Top Association Rules:")
+print("\nTop Association Rules:")
 print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']].head(10))
 
 # Visualizing Association Rules
