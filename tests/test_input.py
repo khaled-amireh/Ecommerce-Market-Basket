@@ -46,3 +46,24 @@ class InputTests(unittest.TestCase):
         df['Quantity'] = True
         with self.assertRaisesRegex(ValueError, 'Quantity'):
             validate_transactions(df)
+
+    def test_missing_invoice_cannot_become_a_shared_basket(self):
+        for value in [None, np.nan, '', '   ']:
+            df = transactions()
+            df.loc[0, 'InvoiceNo'] = value
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'InvoiceNo'):
+                validate_transactions(df)
+
+    def test_nontext_labels_are_rejected(self):
+        for column in ['Description', 'Country']:
+            df = transactions().astype({column: object})
+            df.loc[0, column] = 7
+            with self.subTest(column=column), self.assertRaisesRegex(ValueError, column):
+                validate_transactions(df)
+
+    def test_complex_and_nullable_missing_quantities_are_rejected(self):
+        for values in [[1j] * 4, pd.array([1, 1, 1, None], dtype='Int64')]:
+            df = transactions()
+            df['Quantity'] = values
+            with self.assertRaisesRegex(ValueError, 'Quantity'):
+                validate_transactions(df)

@@ -23,12 +23,21 @@ def validate_transactions(df):
     if df.empty:
         raise ValueError('Transaction input contains no rows.')
     result = df.copy()
+    invoice = result['InvoiceNo'].astype('string')
+    if invoice.isna().any() or invoice.str.strip().eq('').any():
+        raise ValueError('InvoiceNo must be nonmissing and nonblank; unknown invoices cannot be grouped safely.')
+    for column in ('Description', 'Country'):
+        nonmissing = result[column].dropna()
+        if not nonmissing.map(lambda value: isinstance(value, str)).all():
+            raise ValueError(f'{column} must contain text labels or missing values.')
     for column in ('Quantity', 'UnitPrice'):
         try:
             numeric = pd.to_numeric(result[column], errors='raise')
         except (TypeError, ValueError) as exc:
             raise ValueError(f'{column} must contain finite numeric values.') from exc
-        if pd.api.types.is_bool_dtype(numeric) or not np.isfinite(numeric).all():
+        if (result[column].map(lambda value: isinstance(value, (bool, np.bool_))).any()
+                or pd.api.types.is_complex_dtype(numeric)
+                or numeric.isna().any() or not np.isfinite(numeric).all()):
             raise ValueError(f'{column} must contain finite numeric values.')
         result[column] = numeric
     return result
@@ -43,7 +52,7 @@ def load_transactions(path='data.csv', encoding='ISO-8859-1'):
             'Supply the original input CSV; the historical data is not bundled.'
         )
     try:
-        df = pd.read_csv(path, encoding=encoding)
+        df = pd.read_csv(path, encoding=encoding, dtype={'InvoiceNo': 'string'})
     except pd.errors.EmptyDataError as exc:
         raise ValueError(f'Transaction CSV is empty: {path}') from exc
     except pd.errors.ParserError as exc:

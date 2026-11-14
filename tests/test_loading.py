@@ -51,3 +51,7 @@ class LoadingTests(unittest.TestCase):
         self.path.write_text('InvoiceNo\n1\n')
         with self.assertRaisesRegex(ValueError, 'Missing required columns'):
             load_transactions(self.path)
+
+    def test_leading_zero_invoice_ids_remain_distinct(self):
+        transactions([('001', 'A'), ('1', 'B')]).to_csv(self.path, index=False)
+        self.assertEqual(load_transactions(self.path).InvoiceNo.tolist(), ['001', '1'])
