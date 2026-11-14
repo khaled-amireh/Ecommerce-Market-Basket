@@ -106,6 +106,12 @@ def mine_itemsets(baskets, min_support=0.02):
     return itemsets.sort_values(by='support', ascending=False)
 
 
+def generate_rules(itemsets):
+    """Retain lift >= 1 and rank numerically by lift, then confidence."""
+    rules = association_rules(itemsets, metric='lift', min_threshold=1.0)
+    return rules.sort_values(by=['lift', 'confidence'], ascending=[False, False])
+
+
 def main():
     # Load Dataset
     df = load_transactions()
@@ -120,9 +126,7 @@ def main():
     print("\nTop Frequent Itemsets:")
     print(frequent_itemsets.head(10))
 
-    # Extracting Association Rules
-    rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1.0)
-    rules = rules.sort_values(by=['lift', 'confidence'], ascending=[False, False])
+    rules = generate_rules(frequent_itemsets)
     print("\nTop Association Rules:")
     print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']].head(10))
 
