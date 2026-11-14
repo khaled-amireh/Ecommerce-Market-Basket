@@ -76,6 +76,21 @@ def clean_transactions(df):
     return df.copy()
 
 
+def build_baskets(df):
+    """Project cleaned rows onto global top-100 labels, then UK multi-item invoices."""
+    # Constructing the Transaction Basket Matrix
+    top_products = df['Description'].value_counts().head(100).index
+    df_filtered = df[df['Description'].isin(top_products)]
+
+    basket = (df_filtered[df_filtered['Country'] == 'United Kingdom']
+              .groupby(['InvoiceNo', 'Description'])['Quantity']
+              .sum().unstack().fillna(0))
+    basket_sets = basket.gt(0)
+    basket_sets = basket_sets[(basket_sets.sum(axis=1) >= 2)]
+
+    return basket_sets
+
+
 def main():
     # Load Dataset
     df = load_transactions()
@@ -84,15 +99,7 @@ def main():
 
     df = clean_transactions(df)
 
-    # Constructing the Transaction Basket Matrix
-    top_products = df['Description'].value_counts().head(100).index
-    df_filtered = df[df['Description'].isin(top_products)]
-
-    basket = (df_filtered[df_filtered['Country'] == 'United Kingdom']
-              .groupby(['InvoiceNo', 'Description'])['Quantity']
-              .sum().unstack().fillna(0))
-    basket_sets = basket.map(lambda x: 1 if x > 0 else 0)
-    basket_sets = basket_sets[(basket_sets.sum(axis=1) >= 2)]
+    basket_sets = build_baskets(df)
 
     # Apriori Algorithm & Frequent Itemsets Mining
     frequent_itemsets = apriori(basket_sets.astype(bool), min_support=0.02, use_colnames=True, low_memory=True, max_len=3)
