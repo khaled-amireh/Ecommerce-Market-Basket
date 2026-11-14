@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pathlib import Path
 from mlxtend.frequent_patterns import apriori, association_rules
 
 
@@ -33,10 +34,30 @@ def validate_transactions(df):
     return result
 
 
+def load_transactions(path='data.csv', encoding='ISO-8859-1'):
+    """Load an explicitly supplied CSV; never substitute a sample dataset."""
+    path = Path(path)
+    if not path.is_file():
+        raise FileNotFoundError(
+            f'Transaction CSV not found: {path.resolve()}. '
+            'Supply the original input CSV; the historical data is not bundled.'
+        )
+    try:
+        df = pd.read_csv(path, encoding=encoding)
+    except pd.errors.EmptyDataError as exc:
+        raise ValueError(f'Transaction CSV is empty: {path}') from exc
+    except pd.errors.ParserError as exc:
+        raise ValueError(f'Malformed transaction CSV: {path}: {exc}') from exc
+    except UnicodeDecodeError as exc:
+        raise ValueError(f'Cannot decode {path} using {encoding}; specify its actual encoding.') from exc
+    except LookupError as exc:
+        raise ValueError(f'Unknown CSV encoding: {encoding}') from exc
+    return validate_transactions(df)
+
+
 def main():
     # Load Dataset
-    df = pd.read_csv('data.csv', encoding='ISO-8859-1')
-    df = validate_transactions(df)
+    df = load_transactions()
     print("Dataset Head:")
     print(df.head())
 
