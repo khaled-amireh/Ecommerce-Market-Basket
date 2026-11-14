@@ -13,8 +13,9 @@ Explore the [original notebook](ecommerce_market_basket.ipynb), the
 
 > **Evidence boundary:** saved notebook previews demonstrate historical analytical
 > output. The input CSV, complete result tables, and environment lock are absent.
-> The standalone script has a syntax error; see reproduction caveats below.
-> No mining was rerun for this documentation review.
+> The standalone script is repaired and covered by 59 synthetic-data tests.
+> Historical numerical reproduction remains unverified without the original CSV.
+> See the [Phase 2 technical report](docs/PHASE2_CHANGES.md).
 
 [Problem](#02-business-problem) · [Dataset](#03-dataset-intelligence) ·
 [Engineering](#06-transaction-basket-engineering) · [Metrics](#10-understanding-the-metrics) ·
@@ -87,7 +88,7 @@ interpretation. Reversing a rule generally changes its confidence.
 
 ## 05 Data cleaning
 
-The notebook (cell 6) and script (lines 16-19) implement these operations in order:
+The notebook (cell 6) and script (`clean_transactions`) retain these operations in order:
 
 ```python
 df = df.dropna(subset=['CustomerID', 'Description'])
@@ -98,9 +99,11 @@ df = df[df['Quantity'] > 0]
 
 CustomerID is required by this filter, although it is not used as a basket key.
 Cancellation exclusion is case-sensitive and does not reconcile subsequent
-returns against original purchases. **No UnitPrice validation, duplicate removal,
-description normalization, or StockCode consistency check is implemented.**
-Removal counts and the effect of excluded anonymous purchases are unknown.
+returns against original purchases. The script now requires finite numeric
+Quantity and UnitPrice and valid invoice keys before cleaning. Zero and negative finite prices remain allowed; no price-sign
+filter, duplicate removal, description normalization or StockCode mapping check
+is added. Loaded/cleaned counts are printed; historical removal counts and the
+effect of excluded anonymous purchases remain unknown. The notebook is unchanged.
 
 The [cleaning methodology](docs/CLEANING_METHODOLOGY.md) distinguishes filter
 guarantees, partial-invoice effects, and checks that are still unimplemented.
@@ -120,7 +123,8 @@ basket_sets = basket_sets[(basket_sets.sum(axis=1) >= 2)]
 ```
 
 Rows represent invoices, columns represent exact description strings, and each
-cell becomes 0 or 1. Apriori receives `basket_sets.astype(bool)`. Ten units and
+cell becomes 0 or 1 in the notebook. The script uses equivalent Boolean
+`basket.gt(0)` directly. Apriori receives Boolean presence. Ten units and
 one unit therefore have equal presence weight. Repeat purchases by a customer
 on different invoices remain separate baskets.
 
@@ -236,8 +240,9 @@ flowchart TD
     K --> L[Display top ten / scatter support versus confidence]
 ```
 
-The diagram describes notebook stages. The script's parse error prevents its
-execution as supplied. There is no deployed serving or evaluation stage.
+The diagram describes notebook stages. The repaired script preserves these
+analytical stages, adding input validation, stage counts and empty-result handling.
+There is no deployed serving or evaluation stage.
 
 ## 12 Verified results
 
@@ -296,29 +301,35 @@ All are unimplemented proposals. High lift alone cannot establish business value
 
 ## 15 Reliability and limitations
 
-The [read-only technical audit](docs/CODE_AUDIT.md) records 14 findings with
-source locations, evidence, severity, status, impact, and proposed corrections.
+The [technical audit](docs/CODE_AUDIT.md) preserves 14 original findings. The
+[Phase 2 reassessment](docs/PHASE2_CHANGES.md) records verified fixes and open
+methodological concerns without erasing the original evidence.
 
 - **Population selection:** known-customer filtering, global top descriptions,
   UK selection, and singleton exclusion restrict generalization.
-- **Data quality:** duplicate lines, price validity, description aliases, missing
-  identifiers, and invoice consistency are not validated.
+- **Data quality:** finite numeric prices/quantities and nonblank invoice keys
+  are validated in the script. Duplicate semantics, economic price validity,
+  description aliases and cross-customer/country invoice consistency remain open.
 - **Transaction meaning:** invoice co-occurrence does not encode purchase order,
   customer independence, return reconciliation, or net revenue.
 - **Sensitivity:** one support setting and a three-item cap are used; stability,
   uncertainty, multiple comparisons, and temporal holdout are unmeasured.
 - **Provenance:** no local CSV, checksum, raw shape, cleaning log, full outputs,
   or package lock is included. Historical outputs are partial evidence.
-- **Execution:** the script has broken print literals; the notebook code parses
-  but its full execution has not been verified in this review.
+- **Execution:** the script compiles and passes synthetic unit/integration tests.
+  The missing historical data prevents a verified full historical run.
 - **Causality:** associations support hypotheses, with no demonstrated sales lift.
 
 ## 16 Repository structure
 
-Exact tracked project tree after the documentation update:
+Tracked project layout:
 
 ```text
 Ecommerce-Market-Basket/
+|-- .gitignore
+|-- CONTRIBUTING.md
+|-- LICENSE
+|-- README.md
 |-- docs/
 |   |-- APRIORI_CONFIGURATION.md
 |   |-- ASSOCIATION_RULES.md
@@ -329,19 +340,30 @@ Ecommerce-Market-Basket/
 |   |-- DATA_PROVENANCE.md
 |   |-- EVIDENCE_BASELINE.md
 |   |-- METRICS_GUIDE.md
+|   |-- PHASE2_BASELINE.json
+|   |-- PHASE2_CHANGES.md
 |   |-- PRODUCT_SCOPE.md
 |   |-- REPRODUCTION.md
 |   |-- VALIDATION.md
-|   `-- VERIFIED_RESULTS.md
-|-- images/
-|   |-- association_rules_plot.png
-|   `-- market-basket-intelligence-banner.svg
-|-- CONTRIBUTING.md
-|-- LICENSE
-|-- README.md
+|   |-- VERIFIED_RESULTS.md
 |-- ecommerce_market_basket.ipynb
 |-- ecommerce_market_basket.py
-`-- requirements.txt
+|-- images/
+|   |-- association_rules_plot.png
+|   |-- market-basket-intelligence-banner.svg
+|-- requirements.txt
+|-- tests/
+|   |-- __init__.py
+|   |-- fixtures.py
+|   |-- test_apriori.py
+|   |-- test_baskets.py
+|   |-- test_cleaning.py
+|   |-- test_cli.py
+|   |-- test_input.py
+|   |-- test_integration.py
+|   |-- test_loading.py
+|   |-- test_rules.py
+|   |-- test_smoke.py
 ```
 
 `data.csv` is expected at runtime but is absent from the tracked repository.
@@ -354,12 +376,11 @@ See [contribution guidance](CONTRIBUTING.md) for evidence standards and
 The [reproduction and troubleshooting guide](docs/REPRODUCTION.md) covers
 kernel selection, input checks, version caveats, and common failure modes.
 
-Review existing outputs by opening the notebook without executing it. For an
-independent future run, create a disposable clone:
+The script is tested on Python 3.11.9 with the installed dependency versions in
+[validation evidence](docs/VALIDATION.md). Create and activate a virtual environment,
+then run from the repository root:
 
 ```bash
-git clone https://github.com/khaled-amireh/Ecommerce-Market-Basket.git
-cd Ecommerce-Market-Basket
 python -m venv .venv
 ```
 
@@ -368,37 +389,43 @@ Activate with `.venv\Scripts\Activate.ps1` in PowerShell or
 
 ```bash
 python -m pip install -r requirements.txt
-python -m pip install notebook ipykernel
-python -m ipykernel install --user --name market-basket --display-name "Market Basket"
-python -m notebook ecommerce_market_basket.ipynb
+python -m py_compile ecommerce_market_basket.py
+python -m unittest discover -s tests -v
+python ecommerce_market_basket.py --help
 ```
 
-Jupyter tooling is an additional local installation, absent from the manifest.
-Obtain the CSV from the attributed Kaggle page, review its terms, and place it
-as `data.csv` in the repository root. Confirm all eight required columns and
-record its checksum before running. A UCI Excel download cannot be renamed to
-CSV; conversion and equivalence verification would be separate work.
+Tests use synthetic data and require no historical CSV, pytest or notebook server.
+Obtain the exact historical input following the [provenance guide](docs/DATA_PROVENANCE.md),
+record its checksum, and supply all eight columns in the
+[input dictionary](docs/DATA_DICTIONARY.md). No replacement input is bundled.
+Replace `/path/to/data.csv` below with that independently acquired CSV path
+(quote paths containing spaces):
 
-Select the Market Basket kernel and run cells in order only in that disposable
-copy. Execution can overwrite saved notebook outputs. Python 3.11.9 is recorded
-in notebook metadata; package versions and a tested compatibility range are
-unknown. `DataFrame.map` requires pandas 2.1+ according to the
-[pandas API reference](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.map.html).
-Fresh unpinned installs are not guaranteed to reproduce the historical run.
+```bash
+python ecommerce_market_basket.py /path/to/data.csv --no-plot
+python ecommerce_market_basket.py /path/to/data.csv --plot-output new_rules.png --no-show
+```
 
-**Do not expect `python ecommerce_market_basket.py` to work as supplied:** its
-print literals at lines 34-35 and 41-42 are syntactically invalid. It also writes
-`association_rules_plot.png` to the current directory, whereas the tracked chart
-is in `images/`. The implementation was preserved during documentation work.
+Without an argument, input defaults to `data.csv` beside the script. Explicit
+relative input and output paths resolve from the working directory. ISO-8859-1
+is the default encoding; use `--encoding utf-8` only if it matches the actual file.
+Existing plot paths are refused. The tracked chart under `images/` stays historical.
+Missing input or invalid data exits with a clear error; this does not indicate
+an Apriori defect. Thresholds and population policies remain unchanged.
+
+Review the notebook without executing/saving it. To run a separate copy, install
+`notebook ipykernel` in the disposable environment; see the
+[reproduction guide](docs/REPRODUCTION.md). Historical package versions remain
+unknown; fresh unpinned installations do not guarantee historical reproduction.
 
 ## 18 Roadmap, author and credits
 
-Future work: establish an input checksum and environment lock; repair the script
-in a separately authorized code change; log stage counts; validate prices,
-duplicates and product identities; compare UK-specific product selection and
-all-invoice denominators; export complete results; assess temporal stability;
-then evaluate any commercial intervention with a controlled experiment.
-None of these improvements is implemented here.
+Future work: recover the historical input checksum and environment; investigate
+duplicate semantics, product identities, invoice consistency and price policy;
+compare UK-specific selection and all-invoice denominators as separate experiments;
+export complete run artifacts; assess temporal stability; then evaluate any
+commercial intervention with a controlled experiment. Script repair, stage counts
+and synthetic correctness tests are completed in Phase 2.
 
 **Khaled Amireh** | [GitHub](https://github.com/khaled-amireh) |
 [Portfolio](https://portfolio-1kpn.onrender.com)

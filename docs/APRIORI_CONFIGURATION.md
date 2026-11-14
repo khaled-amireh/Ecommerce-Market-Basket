@@ -1,5 +1,9 @@
 # Apriori configuration and search boundaries
 
+> **Phase 2 update (2026-11-14):** The script now uses `mine_itemsets`: Boolean/binary matrix validation, an explicit empty-population error, the same default support .02 and length cap 3, and the same low-memory call. The function accepts an explicit support argument for controlled tests/experiments; the CLI keeps .02. Hand-counted fixtures verify support and boundaries.
+> See [verified corrections](PHASE2_CHANGES.md). The original review below describes
+> the preserved notebook and Phase 1 script; its script line numbers are historical.
+
 Source: [notebook](../ecommerce_market_basket.ipynb) cell 10, source lines 1–5;
 [script](../ecommerce_market_basket.py#L32) lines 32–36.
 

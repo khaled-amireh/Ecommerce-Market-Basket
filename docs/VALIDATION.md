@@ -1,3 +1,88 @@
+# Phase 2 validation and integrity evidence
+
+Validation date: 2026-11-14 (Asia/Amman). Starting HEAD:
+`07c354c59119f124f8d6e2e38d63e9d6d268e9fb`; initial branch `main`, clean tree.
+Final branch: `phase2-technical-quality`. See [technical report](PHASE2_CHANGES.md)
+and [pre-edit artifact hashes](PHASE2_BASELINE.json).
+
+## Executed checks
+
+| Check | Actual result |
+| --- | --- |
+| `python -m py_compile ecommerce_market_basket.py` | Passed after syntax repair and at completion; syntax validation only |
+| `python -m unittest discover -s tests -v` | 59 tests passed, 0 failures, 0 errors, 0 skipped; full run 12.744 seconds |
+| Import smoke | Import in an empty temporary directory succeeds silently, without data loading or plot creation |
+| Input validation | Missing file/schema, empty/header-only CSV, malformed CSV, encoding errors, invalid numeric values, missing/blank invoice IDs tested |
+| Cleaning and baskets | Historical policies, positive-line aggregation, duplicates, exact labels/country, singletons, global top-100 and denominator verified |
+| Apriori | Hand-counted supports, inclusive .02 threshold, length cap 3, invalid matrix and empty-result cases verified |
+| Rules | Joint support, directional confidence, lift, lift >= 1, numeric ranking, partitions and empty output verified |
+| Integration | Complete synthetic CSV workflow, stage counts and empty-stage messages pass; in-memory notebook source parity passes |
+| CLI | Help, default/explicit missing input (exit 2), explicit input from another working directory, no-plot and full synthetic --no-show export verified |
+| Plot export | A fresh PNG is decoded successfully; existing output bytes preserved; figure closed |
+| Documentation | 95 relative Markdown links checked, README anchors resolve, 6 Python snippets compile; tree matches 35 tracked files |
+| Whitespace | `git diff --check` against Phase 2 starting HEAD passes |
+| Protected evidence | Notebook, embedded output PNG, tracked PNG, banner and license SHA-256 match the pre-edit manifest |
+| Dependencies | All five runtime packages available; pytest absent, so unittest is used; no package installation or manifest modification |
+
+All ordinary tests use invented synthetic data, never the missing historical CSV.
+The parity test executes analytical source strings extracted from the notebook
+in a temporary Python namespace, not a notebook kernel; it never saves outputs.
+No full-dataset rerun or numerical reproduction of the saved teacup rule is claimed.
+No coverage percentage is claimed. The original notebook's seven code cells parse.
+
+## Tested environment
+
+This records the installed environment, not a recovered historical lock or a
+claim that other versions were tested. Existing requirements remain unpinned.
+
+| Component | Version |
+| --- | --- |
+| Python | 3.11.9 |
+| pandas | 3.0.3 |
+| NumPy | 2.4.6 |
+| mlxtend | 0.25.0 |
+| Matplotlib | 3.11.0 |
+| seaborn | 0.13.2 |
+| SciPy | 1.17.1 |
+| scikit-learn | 1.9.0 |
+
+## SHA-256 comparisons
+
+| Protected artifact | Before and after SHA-256 (identical) |
+| --- | --- |
+| ecommerce_market_basket.ipynb | `f629ed810743f14bd406f998ed3aeee625f868a6c8cfb66e6c598384822a4206` |
+| images/association_rules_plot.png | `06449323da3a48d98d466d9cd0cfee5fe8224352657da5a9744933387a42f4b4` |
+| Embedded notebook PNG | `61e561f49369df9604ebd27be818d150db3a6ccc443e6b669ed7a2d6c3c3786a` |
+| images/market-basket-intelligence-banner.svg | `5536f6bf65011ba0716c4c051d54ea5a9284aa1e3b25ff6e35739a9799d5a579` |
+| LICENSE | `72a967ad8f5674562cd5bcc81b8665f2791382f23a671d5e7ce595954f636d69` |
+| requirements.txt (also unchanged) | `134903ba774e841f42a04ee27bb2f3e43b610e893f7b3fcc2f26d3d2443a4929` |
+
+No original dataset file existed at baseline or completion; dataset comparison
+is unavailable, not a passed checksum check. Full notebook byte identity also
+protects all saved outputs and metadata. The script is intentionally repaired;
+its older Phase 1 preservation restriction no longer applies to Phase 2.
+
+## Git scope and remaining limits
+
+Fifteen genuine local commits cover the independent repairs/tests/docs listed
+in [the report](PHASE2_CHANGES.md). All original tracked paths remain. No history
+rewrite, artificial commit, date manipulation, push or deployment was performed.
+The final SHA is obtained with `git rev-parse HEAD` to avoid a self-referential
+commit hash in this file. Final working-tree status is clean.
+
+The historical input identity and historical package environment remain open.
+Other limitations include invoice consistency, product mappings, duplicate/price
+semantics, top-product boundary ties, selection bias and unmeasured business value.
+Per-filter exclusion logs and full analytical exports remain future work.
+
+---
+
+## Phase 1 record retained below (2026-11-08)
+
+The following is historical evidence from the previous documentation-only phase.
+Its preservation scope, execution statements and commit count apply to that phase,
+not to this technical repair. Original script line numbers in that record are historical.
+
 # Documentation validation and integrity record
 
 Review date: 2026-11-08. Starting HEAD:

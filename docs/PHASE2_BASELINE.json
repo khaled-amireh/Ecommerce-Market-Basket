@@ -1,0 +1,28 @@
+{
+  "starting_head": "07c354c59119f124f8d6e2e38d63e9d6d268e9fb",
+  "starting_branch": "main",
+  "initial_working_tree": "clean",
+  "dataset_files": [],
+  "protected_files": {
+    "LICENSE": {
+      "sha256": "72a967ad8f5674562cd5bcc81b8665f2791382f23a671d5e7ce595954f636d69",
+      "bytes": 1091
+    },
+    "ecommerce_market_basket.ipynb": {
+      "sha256": "f629ed810743f14bd406f998ed3aeee625f868a6c8cfb66e6c598384822a4206",
+      "bytes": 125761
+    },
+    "images/association_rules_plot.png": {
+      "sha256": "06449323da3a48d98d466d9cd0cfee5fe8224352657da5a9744933387a42f4b4",
+      "bytes": 143151
+    },
+    "images/market-basket-intelligence-banner.svg": {
+      "sha256": "5536f6bf65011ba0716c4c051d54ea5a9284aa1e3b25ff6e35739a9799d5a579",
+      "bytes": 3466
+    }
+  },
+  "embedded_notebook_png": {
+    "bytes": 74145,
+    "sha256": "61e561f49369df9604ebd27be818d150db3a6ccc443e6b669ed7a2d6c3c3786a"
+  }
+}

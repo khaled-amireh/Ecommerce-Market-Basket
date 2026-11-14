@@ -1,5 +1,11 @@
 # Read-only analytical correctness audit
 
+> **Phase 2 follow-up (2026-11-14):** AUD-01 and AUD-13 are resolved for the
+> script; AUD-14 has an explicit safe export contract. AUD-09 is partly addressed.
+> The missing data and methodological limitations remain open. See the full
+> [finding-by-finding reassessment](PHASE2_CHANGES.md). This original read-only
+> audit and its line references are retained as historical evidence.
+
 Review date: 2026-11-08. Baseline:
 `ad13f98afac5c646bb38cd3521d69352c2d86e0c` on `main`.
 All protected original files remain unchanged. No mining or dataset reconstruction was run.

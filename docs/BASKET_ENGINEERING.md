@@ -1,5 +1,9 @@
 # Basket construction and the support denominator
 
+> **Phase 2 update (2026-11-14):** The script now uses `build_baskets` on cleaned data. Vectorized `gt(0)` produces Boolean presence directly; synthetic notebook-parity tests confirm the same grouping and eligibility. Global top-100, exact UK matching and singleton exclusions remain unchanged. Empty eligible populations fail clearly before mining. Missing invoice IDs are rejected before grouping.
+> See [verified corrections](PHASE2_CHANGES.md). The original review below describes
+> the preserved notebook and Phase 1 script; its script line numbers are historical.
+
 Source: [notebook](../ecommerce_market_basket.ipynb) cell 8, ID `37cb3381`,
 source lines 4–8; [script](../ecommerce_market_basket.py#L25) lines 25–29.
 
