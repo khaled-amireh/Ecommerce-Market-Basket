@@ -1,6 +1,7 @@
 # E-Commerce Market Basket Analysis using Apriori Algorithm
 
 # Import Libraries
+import argparse
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -120,9 +121,46 @@ def generate_rules(itemsets):
     return rules.sort_values(by=['lift', 'confidence'], ascending=[False, False])
 
 
-def main():
+def plot_rules(rules, output, show=True):
+    """Export a new PNG without overwriting an existing research artifact."""
+    if rules.empty:
+        return
+    output = Path(output)
+    if output.exists():
+        raise FileExistsError(f'Plot output already exists: {output}. Choose a new --plot-output path.')
+    fig, ax = plt.subplots(figsize=(8, 5))
+    try:
+        sns.scatterplot(data=rules, x='support', y='confidence', size='lift',
+                        hue='lift', palette='viridis', ax=ax)
+        ax.set_title('Association Rules')
+        with output.open('xb') as stream:
+            fig.savefig(stream, format='png')
+        if show:
+            plt.show()
+    finally:
+        plt.close(fig)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='Mine the historical selected UK invoice population.')
+    parser.add_argument('input', nargs='?', type=Path,
+                        default=Path(__file__).resolve().with_name('data.csv'),
+                        help='CSV path (default: data.csv beside this script)')
+    parser.add_argument('--encoding', default='ISO-8859-1')
+    parser.add_argument('--plot-output', type=Path, default=Path('association_rules_plot.png'))
+    parser.add_argument('--no-plot', action='store_true', help='Skip plot export and display')
+    parser.add_argument('--no-show', action='store_true', help='Export without opening a plot window')
+    args = parser.parse_args(argv)
+    try:
+        run_analysis(args.input, args.encoding, args.plot_output, args.no_plot, args.no_show)
+    except (OSError, ValueError) as exc:
+        parser.exit(2, f'Error: {exc}\n')
+
+
+def run_analysis(input_path, encoding='ISO-8859-1', plot_output='association_rules_plot.png',
+                 no_plot=False, no_show=False):
     # Load Dataset
-    df = load_transactions()
+    df = load_transactions(input_path, encoding=encoding)
     print("Dataset Head:")
     print(df.head())
 
@@ -144,12 +182,8 @@ def main():
         print('No association rules meet lift >= 1; no plot generated.')
         return
 
-    # Visualizing Association Rules
-    plt.figure(figsize=(8, 5))
-    sns.scatterplot(data=rules, x='support', y='confidence', size='lift', hue='lift', palette='viridis')
-    plt.title('Association Rules')
-    plt.savefig('association_rules_plot.png')
-    plt.show()
+    if not no_plot:
+        plot_rules(rules, plot_output, show=not no_show)
 
 
 if __name__ == "__main__":
