@@ -1,5 +1,9 @@
 # Product selection and country scope
 
+> **Phase 2 update (2026-11-14):** The script retains the exact global row-frequency top-100 selection before country filtering. Tests include 101 descriptions, overseas lines, repeated lines, differing quantities and projection-induced singleton removal. Boundary ties still use pandas value_counts ordering; no historical tie order has been recovered.
+> See [verified corrections](PHASE2_CHANGES.md). The original review below describes
+> the preserved notebook and Phase 1 script; its script line numbers are historical.
+
 Source: [notebook](../ecommerce_market_basket.ipynb) cell 8, source lines 1–6;
 [script](../ecommerce_market_basket.py#L22) lines 22–27.
 

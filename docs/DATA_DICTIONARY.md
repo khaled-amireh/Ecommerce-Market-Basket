@@ -1,5 +1,9 @@
 # Input and derived feature dictionary
 
+> **Phase 2 update (2026-11-14):** The script requires all eight columns, preserves CSV InvoiceNo as text, rejects missing/blank invoice IDs and nontext nonmissing Description/Country, and converts Quantity/UnitPrice to finite real numbers. Missing descriptions/customers retain the historical exclusion policy; country labels remain exact. Dates and StockCode mappings are not validated. UnitPrice zero/negative values remain eligible. No revenue inference is added.
+> See [verified corrections](PHASE2_CHANGES.md). The original review below describes
+> the preserved notebook and Phase 1 script; its script line numbers are historical.
+
 All eight input columns are visible in saved notebook cell 4. Meanings below
 follow the [source schema](https://archive.ics.uci.edu/dataset/352/online+retail);
 the implementation-use column is verified from notebook cells 6–12.

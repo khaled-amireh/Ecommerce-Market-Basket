@@ -1,5 +1,9 @@
 # Rule generation, ranking, and interpretation
 
+> **Phase 2 update (2026-11-14):** The script now uses `generate_rules` with the same lift >= 1 threshold and numeric lift/confidence ranking. Empty itemsets return an empty five-column rule table; no qualifying rules skip plotting. Hand-counted fixtures verify metrics, direction, inclusive filtering and ranking.
+> See [verified corrections](PHASE2_CHANGES.md). The original review below describes
+> the preserved notebook and Phase 1 script; its script line numbers are historical.
+
 Source: [notebook](../ecommerce_market_basket.ipynb) cell 12 (ID `e9595a4d`),
 source lines 1–3; [script](../ecommerce_market_basket.py#L39) lines 39–43.
 

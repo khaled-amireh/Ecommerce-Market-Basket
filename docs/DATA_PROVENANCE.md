@@ -1,5 +1,9 @@
 # Dataset provenance and acquisition
 
+> **Phase 2 update (2026-11-14):** The historical CSV remains absent. No external data was acquired. The CLI now accepts an explicit CSV path and encoding; its default input is data.csv beside the script. Tests create temporary synthetic CSVs only. ISO-8859-1 remains the default and decodes arbitrary byte values, so successful decoding does not establish correct encoding or source identity.
+> See [verified corrections](PHASE2_CHANGES.md). The original review below describes
+> the preserved notebook and Phase 1 script; its script line numbers are historical.
+
 ## What is actually recorded
 
 [Notebook](../ecommerce_market_basket.ipynb) cell 4, source line 1, and

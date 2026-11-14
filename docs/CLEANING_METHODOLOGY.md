@@ -1,5 +1,9 @@
 # Cleaning methodology and exclusions
 
+> **Phase 2 update (2026-11-14):** The script now validates schema, nonblank/nonmissing invoice IDs, text label types, and finite numeric Quantity/UnitPrice before cleaning. CSV invoice IDs load as strings. Malformed input fails as a whole, rather than being silently filtered. Known-customer/description exclusions, uppercase-C matching, positive quantities, duplicates and literal labels retain historical semantics. Price signs remain unrestricted. Loaded/cleaned row and invoice counts are printed; per-filter counts are not yet logged.
+> See [verified corrections](PHASE2_CHANGES.md). The original review below describes
+> the preserved notebook and Phase 1 script; its script line numbers are historical.
+
 Source: [notebook](../ecommerce_market_basket.ipynb) cell 6 (ID `6678cd43`),
 source lines 1–4; [script](../ecommerce_market_basket.py#L16) lines 16–19.
 The sequence is identical in both entry points. No removal counts are saved.
