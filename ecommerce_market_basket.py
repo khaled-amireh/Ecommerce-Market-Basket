@@ -7,9 +7,36 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from mlxtend.frequent_patterns import apriori, association_rules
 
+
+REQUIRED_COLUMNS = (
+    'InvoiceNo', 'StockCode', 'Description', 'Quantity', 'InvoiceDate',
+    'UnitPrice', 'CustomerID', 'Country',
+)
+
+
+def validate_transactions(df):
+    """Validate the input contract without filtering or normalizing labels."""
+    missing = sorted(set(REQUIRED_COLUMNS) - set(df.columns))
+    if missing:
+        raise ValueError(f"Missing required columns: {', '.join(missing)}")
+    if df.empty:
+        raise ValueError('Transaction input contains no rows.')
+    result = df.copy()
+    for column in ('Quantity', 'UnitPrice'):
+        try:
+            numeric = pd.to_numeric(result[column], errors='raise')
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f'{column} must contain finite numeric values.') from exc
+        if pd.api.types.is_bool_dtype(numeric) or not np.isfinite(numeric).all():
+            raise ValueError(f'{column} must contain finite numeric values.')
+        result[column] = numeric
+    return result
+
+
 def main():
     # Load Dataset
     df = pd.read_csv('data.csv', encoding='ISO-8859-1')
+    df = validate_transactions(df)
     print("Dataset Head:")
     print(df.head())
 
