@@ -1,22 +1,24 @@
 # Reproduction and troubleshooting
 
-## Review without modifying evidence
+## Evidence boundary
 
-Open [the tracked notebook](../ecommerce_market_basket.ipynb) to inspect saved
-outputs. Do not execute and save it in the preservation checkout. The script
-has confirmed syntax errors at lines 34–35 and 41–42; this documentation does
-not repair them. The notebook's seven code cells parse, but end-to-end execution
-was not attempted. Mining and dependency installation were not performed here.
+The standalone script is repaired and tested with synthetic input. The original
+CSV is absent, and the saved notebook metrics have not been independently
+reproduced. Inspect the notebook without executing/saving it. Use a separate
+copy for any future historical experiment. See [technical changes](PHASE2_CHANGES.md),
+[validation evidence](VALIDATION.md) and [dataset provenance](DATA_PROVENANCE.md).
 
 ## Prepare an independent environment
-
-Run these commands in a separate working directory:
 
 ```bash
 git clone https://github.com/khaled-amireh/Ecommerce-Market-Basket.git
 cd Ecommerce-Market-Basket
 python -m venv .venv
 ```
+
+The repair commits are local and have not been pushed. A fresh remote clone will
+not contain them until the owner separately publishes them. To validate these
+changes now, use this local branch/worktree, or copy it to a disposable location.
 
 PowerShell activation:
 
@@ -30,51 +32,92 @@ macOS/Linux activation:
 source .venv/bin/activate
 ```
 
-Install the existing manifest and additional notebook tooling:
+Install runtime packages and validate the repaired local checkout:
 
 ```bash
 python -m pip install -r requirements.txt
+python -m py_compile ecommerce_market_basket.py
+python -m unittest discover -s tests -v
+python ecommerce_market_basket.py --help
+```
+
+No pytest or notebook installation is required for the tests. The tested Python
+and package versions are recorded in VALIDATION.md; the historical package
+versions remain unknown. An unpinned fresh installation may differ from the
+tested stack. No arbitrary compatibility bounds or major upgrades were added.
+
+## Supply the actual input
+
+Follow the provenance guide to identify an authorized CSV snapshot and record
+its checksum, retrieval/version metadata, dimensions and date range. Do not
+substitute a similarly named dataset or rename an Excel file to CSV.
+
+All eight columns are required: InvoiceNo, StockCode, Description, Quantity,
+InvoiceDate, UnitPrice, CustomerID, Country. The
+[input dictionary](DATA_DICTIONARY.md) records validation versus unused fields.
+Invoice IDs load as text; missing/blank IDs fail before grouping. Quantity and
+UnitPrice must be finite real numbers (numeric strings are accepted). Nonmissing
+Description/Country must be text. Validation rejects an invalid input file as a
+whole, including invalid rows that historical cleaning might otherwise exclude.
+UnitPrice signs are not filtered. Missing customer/description and nonpositive
+quantity exclusions retain historical meaning.
+
+Replace `/path/to/data.csv` with the actual input path; quote paths containing spaces:
+
+```bash
+python ecommerce_market_basket.py /path/to/data.csv --no-plot
+python ecommerce_market_basket.py /path/to/data.csv --plot-output new_rules.png --no-show
+```
+
+The CLI default input is data.csv beside the script, independent of working
+directory. An explicit relative input path is relative to the working directory.
+The default encoding is ISO-8859-1; `--encoding utf-8` is available for an input
+known to use UTF-8. Latin-1 decodes all bytes, so decoding success is not proof
+of correct encoding. No automatic encoding fallback is applied.
+
+The default plot is association_rules_plot.png in the working directory, distinct
+from the historical images/association_rules_plot.png. Every existing plot path
+is refused; choose a new filename for each run. --no-show exports without opening
+a window; --no-plot skips both. No eligible baskets cause exit 2 with an explanation.
+No frequent itemsets or qualifying rules are successful empty outcomes with an
+explicit message and no plot. Support is .02, maximum length 3, low memory true;
+rules require lift >= 1. No confidence cutoff is applied.
+
+## Optional notebook review
+
+In a disposable copy only:
+
+```bash
 python -m pip install notebook ipykernel
 python -m ipykernel install --user --name market-basket --display-name "Market Basket"
 python -m notebook ecommerce_market_basket.ipynb
 ```
 
-Choose the registered Market Basket kernel. The notebook records Python 3.11.9,
-but the original package versions are unknown. These commands are a preparation
-recipe, not a tested historical environment. `DataFrame.map` needs pandas 2.1+
-([official API](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.map.html));
-that minimum alone is not a complete compatibility specification.
+Choose the intended kernel. The preserved notebook uses DataFrame.map, requiring
+pandas 2.1+; the revised script uses vectorized gt(0). The notebook has the older
+unchecked input path and cannot be assumed to have the script's validation or
+empty/export guards. Never save a rerun over the original research evidence.
 
-Obtain root-level `data.csv` following [the provenance guide](DATA_PROVENANCE.md).
-The loader expects a CSV compatible with ISO-8859-1 and the eight columns in
-[the feature dictionary](DATA_DICTIONARY.md). Match the working directory to the
-repository root, verify the input checksum, then run notebook cells in order in
-the disposable clone. Saving after execution changes the notebook evidence.
+## Troubleshooting
 
-## Troubleshooting map
+| Symptom | Action |
+| --- | --- |
+| Transaction CSV not found | Supply the exact authorized CSV path; data is absent from Git |
+| Missing required columns | Check distribution, CSV header and delimiter; Excel needs actual conversion |
+| Cannot decode / unknown encoding | Supply the actual file encoding; do not guess from filename |
+| Nonfinite numeric field or missing invoice | Investigate source data; rejection is explicit, not silent filtering |
+| No eligible baskets | Inspect cleaned UK population, global top-100 projection and singleton exclusion |
+| No itemsets/rules | Inspect stage counts without changing thresholds to improve appearances |
+| Plot output already exists | Choose a new --plot-output path; preserve prior outputs |
+| Notebook missing map / API argument | Check installed environment and kernel; historical environment is unknown |
+| Different historical metrics | Check input identity and environment; do not edit the saved metrics |
 
-| Symptom | Likely cause / evidence | Next step in an independent reproduction |
-| --- | --- | --- |
-| Script SyntaxError before any output | Broken print literals, AUD-01 | Use notebook for inspection; repair script only in authorized code work |
-| `data.csv` not found | CSV is absent or working directory differs | Acquire correct CSV and confirm root working directory |
-| Unicode or column errors | Wrong distribution, format, header, or encoding | Inspect actual input; do not rename Excel as CSV |
-| DataFrame has no `map` attribute | pandas predates the required API | Check pandas version in the selected kernel |
-| Missing `association_rules` argument or changed behavior | Unpinned mlxtend API compatibility | Inspect installed version/signature and recover a tested environment |
-| Empty frequent-itemset error | No eligible baskets or no sets above threshold | Inspect upstream populations before changing parameters |
-| Empty or unexpected plot | No qualifying rules, kernel state, or different input | Inspect complete rules and stage counts; do not infer totals from pixels |
-| Installed package unavailable in notebook | Wrong kernel interpreter | Select the registered virtual-environment kernel |
-| Root PNG differs from README image | Script exports to current directory | Compare provenance; tracked image is under `images/` |
+## Evidence for a future historical run
 
-Do not silently change support, filters, or product ranking to make a run
-produce attractive results. A changed configuration is a new experiment.
-
-## Evidence to retain after a future run
-
-Record input checksum and provenance, Python/package versions, ordered execution,
-row and invoice counts after each filter, exact selected descriptions, basket
-shape/dtypes, support denominator, full frequent itemsets and rules, metric
-definitions, timings, and chart export path. Check the visible teacup rule against
-[the historical ledger](VERIFIED_RESULTS.md), allowing for display rounding.
-Differences should be investigated, not edited into the old outputs.
-
-Package manifests, data, and results in this repository remain unchanged.
+Retain the input checksum/acquisition record, Python/package versions, complete
+stage counts and exclusion reasons, exact selected labels, basket dimensions and
+support denominator, complete itemsets/rules, parameters and output paths.
+The current script prints loaded/cleaned counts, basket width/count, parameters,
+and itemset/rule counts plus previews; it does not export a full run manifest or
+complete result tables. Record these separately for a scientific reproduction.
+Compare with the [saved-result ledger](VERIFIED_RESULTS.md) without forcing a match.
