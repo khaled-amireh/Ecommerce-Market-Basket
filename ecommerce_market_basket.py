@@ -161,14 +161,19 @@ def run_analysis(input_path, encoding='ISO-8859-1', plot_output='association_rul
                  no_plot=False, no_show=False):
     # Load Dataset
     df = load_transactions(input_path, encoding=encoding)
+    print(f'Loaded: {len(df)} rows, {df.InvoiceNo.nunique()} invoices.')
     print("Dataset Head:")
     print(df.head())
 
     df = clean_transactions(df)
+    print(f'Cleaned: {len(df)} rows, {df.InvoiceNo.nunique()} invoices.')
 
     basket_sets = build_baskets(df)
+    print(f'Eligible baskets: {len(basket_sets)}; matrix description columns: {basket_sets.shape[1]}.')
+    print('Mining: min_support=0.02, max_len=3, low_memory=True; rule lift >= 1.')
 
     frequent_itemsets = mine_itemsets(basket_sets)
+    print(f'Frequent itemsets: {len(frequent_itemsets)}.')
     print("\nTop Frequent Itemsets:")
     print(frequent_itemsets.head(10))
     if frequent_itemsets.empty:
@@ -176,6 +181,7 @@ def run_analysis(input_path, encoding='ISO-8859-1', plot_output='association_rul
         return
 
     rules = generate_rules(frequent_itemsets)
+    print(f'Qualifying rules: {len(rules)}.')
     print("\nTop Association Rules:")
     print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']].head(10))
     if rules.empty:
