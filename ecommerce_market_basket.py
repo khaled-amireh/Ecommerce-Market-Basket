@@ -55,17 +55,25 @@ def load_transactions(path='data.csv', encoding='ISO-8859-1'):
     return validate_transactions(df)
 
 
+def clean_transactions(df):
+    """Preserve the historical positive-line, known-customer population."""
+    df = validate_transactions(df)
+    # Data Preprocessing & Cleaning
+    df = df.dropna(subset=['CustomerID', 'Description'])
+    df['InvoiceNo'] = df['InvoiceNo'].astype(str)
+    df = df[~df['InvoiceNo'].str.startswith('C')]
+    df = df[df['Quantity'] > 0]
+
+    return df.copy()
+
+
 def main():
     # Load Dataset
     df = load_transactions()
     print("Dataset Head:")
     print(df.head())
 
-    # Data Preprocessing & Cleaning
-    df = df.dropna(subset=['CustomerID', 'Description'])
-    df['InvoiceNo'] = df['InvoiceNo'].astype(str)
-    df = df[~df['InvoiceNo'].str.startswith('C')]
-    df = df[df['Quantity'] > 0]
+    df = clean_transactions(df)
 
     # Constructing the Transaction Basket Matrix
     top_products = df['Description'].value_counts().head(100).index
