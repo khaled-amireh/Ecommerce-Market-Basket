@@ -91,6 +91,21 @@ def build_baskets(df):
     return basket_sets
 
 
+def mine_itemsets(baskets, min_support=0.02):
+    """Mine complete itemsets up to length three over eligible baskets."""
+    if baskets.empty:
+        raise ValueError('No eligible baskets: require UK invoices with at least two selected descriptions.')
+    if not baskets.columns.is_unique:
+        raise ValueError('Basket description columns must be unique.')
+    if baskets.isna().any().any() or not baskets.isin([0, 1]).all().all():
+        raise ValueError('Basket values must be Boolean or binary 0/1 presence indicators.')
+    if isinstance(min_support, bool) or not 0 < min_support <= 1:
+        raise ValueError('min_support must be greater than 0 and at most 1.')
+    itemsets = apriori(baskets.astype(bool), min_support=min_support,
+                       use_colnames=True, low_memory=True, max_len=3)
+    return itemsets.sort_values(by='support', ascending=False)
+
+
 def main():
     # Load Dataset
     df = load_transactions()
@@ -101,9 +116,7 @@ def main():
 
     basket_sets = build_baskets(df)
 
-    # Apriori Algorithm & Frequent Itemsets Mining
-    frequent_itemsets = apriori(basket_sets.astype(bool), min_support=0.02, use_colnames=True, low_memory=True, max_len=3)
-    frequent_itemsets = frequent_itemsets.sort_values(by='support', ascending=False)
+    frequent_itemsets = mine_itemsets(basket_sets)
     print("\nTop Frequent Itemsets:")
     print(frequent_itemsets.head(10))
 
