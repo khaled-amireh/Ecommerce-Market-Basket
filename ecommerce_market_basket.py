@@ -108,6 +108,14 @@ def mine_itemsets(baskets, min_support=0.02):
 
 def generate_rules(itemsets):
     """Retain lift >= 1 and rank numerically by lift, then confidence."""
+    if itemsets.empty:
+        return pd.DataFrame({
+            'antecedents': pd.Series(dtype=object),
+            'consequents': pd.Series(dtype=object),
+            'support': pd.Series(dtype=float),
+            'confidence': pd.Series(dtype=float),
+            'lift': pd.Series(dtype=float),
+        })
     rules = association_rules(itemsets, metric='lift', min_threshold=1.0)
     return rules.sort_values(by=['lift', 'confidence'], ascending=[False, False])
 
@@ -125,10 +133,16 @@ def main():
     frequent_itemsets = mine_itemsets(basket_sets)
     print("\nTop Frequent Itemsets:")
     print(frequent_itemsets.head(10))
+    if frequent_itemsets.empty:
+        print('No frequent itemsets meet min_support=0.02; no rules or plot generated.')
+        return
 
     rules = generate_rules(frequent_itemsets)
     print("\nTop Association Rules:")
     print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']].head(10))
+    if rules.empty:
+        print('No association rules meet lift >= 1; no plot generated.')
+        return
 
     # Visualizing Association Rules
     plt.figure(figsize=(8, 5))

@@ -6,6 +6,23 @@ from ecommerce_market_basket import generate_rules, mine_itemsets
 
 
 class RuleTests(unittest.TestCase):
+    def test_empty_itemsets_return_usable_empty_rule_schema(self):
+        rules = generate_rules(pd.DataFrame(columns=['support', 'itemsets']))
+        self.assertTrue(rules.empty)
+        self.assertEqual(rules.columns.tolist(),
+                         ['antecedents', 'consequents', 'support', 'confidence', 'lift'])
+        self.assertEqual(rules.support.dtype, float)
+
+    def test_singletons_do_not_generate_rules(self):
+        rules = generate_rules(pd.DataFrame({'support': [.5, .5],
+                                             'itemsets': [frozenset('A'), frozenset('B')]}))
+        self.assertTrue(rules.empty)
+        self.assertIn('lift', rules)
+
+    def test_only_negative_associations_produce_no_qualifying_rules(self):
+        baskets = pd.DataFrame([[1, 1], [1, 0], [1, 0], [0, 1]], columns=['A', 'B'], dtype=bool)
+        self.assertTrue(generate_rules(mine_itemsets(baskets)).empty)
+
     def test_independent_joint_support_direction_confidence_and_lift(self):
         # Four baskets: AB, AB, AC, C.
         baskets = pd.DataFrame([[1, 1, 0], [1, 1, 0], [1, 0, 1], [0, 0, 1]],
